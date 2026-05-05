@@ -41,9 +41,8 @@ func splitBlocks(lines []string, lineOffset int) blockScan {
 			i++
 			continue
 		}
-		if strings.HasPrefix(line, "End:") {
-			v := strings.TrimPrefix(line, "End:")
-			v = strings.TrimPrefix(v, " ")
+		if rest, ok := strings.CutPrefix(line, "End:"); ok {
+			v := strings.TrimSpace(rest)
 			bs.end = &v
 			i++
 			continue
