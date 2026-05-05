@@ -118,12 +118,3 @@ func parseBlockHeader(opener string) (relay, blockDate string, ok bool) {
 	}
 	return strings.TrimSpace(m[1]), strings.TrimSpace(m[2]), true
 }
-
-func hasConnected(body []string) bool {
-	for _, l := range body {
-		if l == "Connected" {
-			return true
-		}
-	}
-	return false
-}

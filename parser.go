@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 	"time"
 )
 
@@ -80,7 +81,7 @@ func buildServerRecord(b rawBlock) ServerRecord {
 		Relay:            relay,
 		BlockDate:        blockDatePtr,
 		Shape:            class.shape,
-		Connected:        hasConnected(b.body),
+		Connected:        slices.Contains(b.body, "Connected"),
 		DNSms:            dt.dnsMs,
 		DNSFailed:        dt.dnsFailed,
 		TLSHandshakeMs:   dt.tlsHandshakeMs,
