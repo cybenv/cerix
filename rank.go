@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"sort"
+	"strings"
 )
 
 func eligibleForRank(r *ServerRecord) bool {
@@ -102,4 +103,27 @@ func countEligible(servers []ServerRecord) int {
 		}
 	}
 	return n
+}
+
+func filterByCountry(servers []ServerRecord, country string) []ServerRecord {
+	if country == "" {
+		return servers
+	}
+	prefix := strings.ToLower(country) + "-"
+	out := make([]ServerRecord, 0, len(servers))
+	for _, r := range servers {
+		if strings.HasPrefix(r.Relay, prefix) {
+			out = append(out, r)
+		}
+	}
+	return out
+}
+
+func writeFilterInfo(w io.Writer, servers []ServerRecord, country string) {
+	if country == "" {
+		return
+	}
+	filtered := filterByCountry(servers, country)
+	fmt.Fprintf(w, "  filter: country=%s | matched=%d, eligible=%d\n",
+		strings.ToLower(country), len(filtered), countEligible(filtered))
 }

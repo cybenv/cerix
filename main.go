@@ -13,8 +13,9 @@ const defaultTopN = 10
 func main() {
 	topN := flag.Int("n", defaultTopN, "number of top relays to print on stderr")
 	outPath := flag.String("o", "", "write JSON output to <path> instead of stdout")
+	country := flag.String("c", "", "filter Top-N to relays starting with <country>- (e.g. us)")
 	flag.Usage = func() {
-		fmt.Fprintln(os.Stderr, "usage: cerix [-n N] [-o PATH] <compact-log>")
+		fmt.Fprintln(os.Stderr, "usage: cerix [-n N] [-c COUNTRY] [-o PATH] <compact-log>")
 		flag.PrintDefaults()
 	}
 	flag.Parse()
@@ -54,5 +55,6 @@ func main() {
 	}
 
 	writeOverview(os.Stderr, &out)
-	writeTopN(os.Stderr, out.Servers, *topN)
+	writeFilterInfo(os.Stderr, out.Servers, *country)
+	writeTopN(os.Stderr, filterByCountry(out.Servers, *country), *topN)
 }
